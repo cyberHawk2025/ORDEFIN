@@ -4,8 +4,6 @@
 
 Esta é a **edição sem conexão bancária automática**. O ORDEFIN permite acompanhar contas e cartões cadastrados manualmente, lançamentos, investimentos e criptomoedas. Não inclui integração Open Finance nem importação bancária OFX/CSV.
 
-> **Sobre este repositório:** esta distribuição foi preparada a partir do pacote fornecido para encapsulamento. Ela inclui a interface **já compilada** (`dist/`), o processo principal Electron, serviços e recursos necessários para execução. **Não inclui o código-fonte original da interface React/TypeScript (`src/`)**. Por isso, não é um repositório completo para editar as telas e recompilar o front-end.
-
 ## Tecnologias
 
 - Electron — aplicativo desktop Windows.
