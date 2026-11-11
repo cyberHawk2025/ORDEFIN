@@ -23,12 +23,23 @@
 ## Pré-requisitos
 
 - Windows 10/11 (64 bits).
-- Node.js e npm instalados.
+- Node.js LTS instalado (o npm é incluído).
 - Conexão à internet para instalar as dependências e consultar serviços externos quando necessário.
 
-## Executar pelo VS Code / PowerShell
+## Baixar e executar pelo PowerShell (sem instalador)
 
-Abra **a pasta deste repositório** no VS Code e use **Terminal > Novo Terminal**:
+1. Instale o [Node.js LTS](https://nodejs.org/) se ainda não estiver instalado.
+2. Abra o PowerShell e execute os comandos abaixo para baixar e extrair o pacote:
+
+```powershell
+$download = Join-Path $HOME "Downloads"
+$zip = Join-Path $download "ORDEFIN-main.zip"
+Invoke-WebRequest -Uri "https://github.com/cyberHawk2025/ORDEFIN/archive/refs/heads/main.zip" -OutFile $zip
+Expand-Archive -Path $zip -DestinationPath $download
+Set-Location (Join-Path $download "ORDEFIN-main")
+```
+
+3. Na mesma janela do PowerShell, instale as dependências e inicie o aplicativo:
 
 ```powershell
 node -v
@@ -38,18 +49,7 @@ npm.cmd run check:electron
 npm.cmd run desktop:start
 ```
 
-`desktop:start` inicia a aplicação Electron usando a interface existente em `dist/`. Para fechar, encerre a janela do aplicativo.
-
-## Criar o instalador para Windows
-
-No terminal do VS Code, dentro da pasta do projeto:
-
-```powershell
-npm.cmd ci
-npm.cmd run encapsular
-```
-
-Se a compilação do instalador terminar sem erros, procure o arquivo `.exe` na pasta `release/`. Essa pasta é ignorada pelo Git.
+`npm.cmd ci` baixa e instala as dependências do projeto na pasta extraída. `desktop:start` abre o ORDEFIN; para fechar, encerre a janela do aplicativo. Esse processo executa o programa diretamente e **não cria nem instala um arquivo `.exe` de instalação**.
 
 **Não execute `npm.cmd run build` nesta distribuição:** o script exige os arquivos-fonte da interface, que não acompanham este pacote. A interface compilada necessária para o Electron já está incluída em `dist/`.
 
