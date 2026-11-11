@@ -1,6 +1,6 @@
 # ORDEFIN — versão 2.1.0
 
-Controle financeiro pessoal para Windows, baseado na V94, com React, TypeScript, Vite, Electron e SQLite. Mantém Dashboard, lançamentos, contas, cartões, carteira e Criptomoedas. As melhorias são incrementais em Meus investimentos.
+Aplicativo desktop para controle financeiro pessoal no Windows. A interface usa React e TypeScript com Vite; o Electron executa o aplicativo e o SQLite armazena os dados localmente. Inclui painel, lançamentos, contas, cartões, investimentos e consulta de criptomoedas.
 
 ## Requisitos e execução no Windows
 
