@@ -2,15 +2,18 @@
 
 ## 1. Preparação
 
-Instale o [Git para Windows](https://git-scm.com/downloads/win), se necessário. Extraia este ZIP em uma pasta no computador e abra essa pasta no VS Code usando **Arquivo > Abrir Pasta**.
+Instale o [Git para Windows](https://git-scm.com/downloads/win) e o [Node.js LTS](https://nodejs.org/) (22.12 ou mais recente), se necessário. Extraia o ZIP do projeto em uma pasta no computador e abra essa pasta no VS Code usando **Arquivo > Abrir Pasta**.
 
-No VS Code, abra **Terminal > Novo Terminal** e execute:
+No VS Code, abra **Terminal > Novo Terminal** e confira as ferramentas:
 
 ```powershell
 git --version
 node -v
 npm.cmd -v
+pnpm.cmd -v
 ```
+
+Se o pnpm ainda não estiver instalado, execute `npm.cmd install --global pnpm@10` e abra um novo terminal.
 
 Se for a primeira vez usando o Git nesse computador, configure a identidade do commit usando **seus próprios dados**:
 
@@ -64,25 +67,19 @@ git push
 
 No VS Code, também é possível usar o painel **Controle de Código-Fonte** para revisar alterações, criar commits e sincronizar.
 
-## 5. Instalar dependências e gerar o executável
+## 5. Instalar dependências, testar e executar
 
 ```powershell
-npm.cmd ci
-npm.cmd run check:electron
-npm.cmd run desktop:start
+pnpm.cmd install --frozen-lockfile
+pnpm.cmd run check:types
+pnpm.cmd test
+pnpm.cmd run check:electron
+pnpm.cmd run build
+pnpm.cmd run desktop:start
 ```
 
-Para gerar o instalador, feche o aplicativo e execute:
+`desktop:start` abre o aplicativo sem criar um instalador. Não envie `release/`, `node_modules/`, bancos de dados ou backups ao GitHub.
 
-```powershell
-npm.cmd run encapsular
-```
+## 6. Dados e privacidade
 
-O instalador será gerado em `release/`, se o processo terminar com sucesso. Não envie `release/` ou `node_modules/` ao GitHub.
-
-## 6. Limitações desta edição
-
-- `dist/` contém a interface compilada e **precisa** estar no Git.
-- O pacote original não contém `src/`; portanto, editar componentes React/TypeScript e rodar `npm.cmd run build` exigirá recuperar o código-fonte original.
-- Alguns scripts do `package.json` original dependem de diretórios não fornecidos (como `scripts/` e `tests/`). Use os comandos de execução e encapsulamento descritos acima; não interprete esses scripts ausentes como testes aprovados.
-- Verifique cuidadosamente que nenhum dado financeiro pessoal, arquivo `.db` ou backup seja incluído nos commits.
+O código-fonte, os testes e as configurações de compilação estão incluídos no repositório. Verifique cuidadosamente que nenhum dado financeiro pessoal, arquivo `.db`, backup, credencial ou arquivo `.env` seja incluído nos commits.

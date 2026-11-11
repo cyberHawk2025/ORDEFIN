@@ -15,8 +15,11 @@ export function createFinancialService({
 } = {}) {
   const cache = new Map(),
     pending = new Map()
+  let blockedUntil = 0
 
   async function request(url, options = {}) {
+    if (now() < blockedUntil)
+      throw Error("Limite de consultas: aguarde antes de tentar novamente")
     let r
     try {
       r = await fetcher(url, { ...options, signal: AbortSignal.timeout(20000) })
@@ -24,6 +27,7 @@ export function createFinancialService({
       throw Error("Sem conexão ou serviço indisponível")
     }
     if (r.status === 429) {
+      blockedUntil = now() + 60000
       throw Error("Limite de consultas atingido (429)")
     }
     if (!r.ok)
@@ -69,22 +73,6 @@ export function createFinancialService({
     })).filter(x => Number.isFinite(x.price) && x.price > 0 && validDate(x.date))
     if (!points.length) throw Error("Fechamentos B3 indisponíveis na fonte gratuita")
     return points.map(x => ({ date: x.date, price: String(x.price) }))
-  }
-
-  // CoinGecko Demo API pública: somente ativos com IDs inequívocos.
-  // Não usar conversão USD/USDT como BRL. Não exige token do usuário.
-  const geckoIds = { BTC: "bitcoin", ETH: "ethereum", SOL: "solana", XRP: "ripple", ADA: "cardano", DOGE: "dogecoin", LTC: "litecoin", DOT: "polkadot", LINK: "chainlink", BCH: "bitcoin-cash", XLM: "stellar", AVAX: "avalanche-2", TRX: "tron", UNI: "uniswap", SHIB: "shiba-inu", USDC: "usd-coin", USDT: "tether" }
-  async function geckoCurrent(symbol) {
-    const id = geckoIds[symbol]
-    if (!id) throw Error(`CoinGecko: símbolo ${symbol} sem ID validado`)
-    const data = await request(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(id)}&vs_currencies=brl&include_last_updated_at=true`)
-    const entry = data?.[id]
-    if (!entry || !Number.isFinite(Number(entry.brl)) || Number(entry.brl) <= 0)
-      throw Error("CoinGecko: preço BRL inválido")
-    const updated = Number(entry.last_updated_at) * 1000
-    if (!Number.isFinite(updated) || updated <= 0 || updated > now() + 60000 || now() - updated > 300000)
-      throw Error("CoinGecko: cotação desatualizada")
-    return quote(entry.brl, localDate(), "CoinGecko · BRL · contingência", "market", { marketTime: updated })
   }
 
   // Fallback público CoinPaprika. IDs são validados pelo catálogo oficial,
@@ -244,15 +232,9 @@ export function createFinancialService({
             if (!point) throw Error("Cotação histórica indisponível para a data")
             return quote(point.price, point.date, result.source, "close", { requestedDate: date })
           }
-          try { return await geckoCurrent(symbol) }
-          catch (geckoError) {
-            try { return await paprikaCurrent(symbol) }
-            catch (paprikaError) {
-              throw Error(`Cotação indisponível. Binance: ${binanceError.message}; CoinGecko: ${geckoError.message}; CoinPaprika: ${paprikaError.message}`)
-            }
-          }
+          return await paprikaCurrent(symbol)
         } catch (paprikaError) {
-          throw paprikaError
+          throw Error(`Cotação indisponível. Binance: ${binanceError.message}; CoinPaprika: ${paprikaError.message}`)
         }
       }
     }

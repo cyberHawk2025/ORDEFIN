@@ -1,24 +1,9 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, session } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { DatabaseSync } = require('node:sqlite');
 const { balanceCentsSql, centsToReais } = require('./money-balance.cjs');
 let db;
-const MAX_BACKUP_BYTES = 256 * 1024 * 1024; // Limite conservador: 256 MiB
-function validateBackupFile(file) {
-  const info = fs.lstatSync(file);
-  if (!info.isFile() || info.isSymbolicLink() || info.size < 100 || info.size > MAX_BACKUP_BYTES) {
-    throw new Error('Backup inválido ou excede o limite de 256 MB.');
-  }
-  const fd = fs.openSync(file, 'r');
-  try {
-    const header = Buffer.alloc(16);
-    if (fs.readSync(fd, header, 0, 16, 0) !== 16 || header.toString('ascii') !== 'SQLite format 3\0') {
-      throw new Error('O arquivo selecionado não é um banco SQLite.');
-    }
-  } finally { fs.closeSync(fd); }
-}
-
 // Bloqueia invocações IPC originadas de frames não confiáveis.
 function assertTrustedSender(event) {
   const frame = event.senderFrame;
@@ -39,8 +24,6 @@ function secureHandle(channel, handler) {
 }
 const { openDatabase } = require('./database.cjs');
 const { toCents: cents, fromCents } = require('./money.cjs');
-const { assertAccountFunds, assertTransactionFunds, assertCardLimit } = require('./financial-guards.cjs');
-const { cardRefundCents } = require('./card-refunds.cjs');
 const money = value => fromCents(cents(value));
 const validMoney = value => typeof value === 'number' && Number.isFinite(value) && require('./money.cjs').isMoney(value);
 function logActivity(action, message) { db.prepare('INSERT INTO activity_log(action,message) VALUES(?,?)').run(action,message); }
@@ -52,8 +35,8 @@ function cardPaymentPreview(id) {
     COALESCE((SELECT SUM(amount) FROM transactions WHERE card_id=? AND kind='despesa'),0) purchases,
     COALESCE((SELECT SUM(amount) FROM card_payments WHERE card_id=?),0) payments`).get(t.card_id,t.card_id);
   const remaining=cents(data.purchases)-cents(t.amount);
-  const overpayment=cardRefundCents(cents(data.purchases),cents(data.payments),cents(t.amount));
-  return {hasPayments:cents(data.payments)>0,refund:fromCents(overpayment),overpayment:fromCents(overpayment),cardId:t.card_id};
+  const overpayment=Math.max(0,cents(data.payments)-remaining);
+  return {hasPayments:cents(data.payments)>0,refund:money(Math.min(cents(t.amount),cents(data.payments))),overpayment:overpayment/100,cardId:t.card_id};
 }
 function checkTransaction(t) {
   if (!t || typeof t.description !== 'string' || !t.description.trim() || typeof t.category !== 'string' ||
@@ -102,12 +85,8 @@ function configurePortugueseMenu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 app.whenReady().then(async () => {
-  // O aplicativo financeiro não necessita de câmera, microfone, geolocalização ou notificações do navegador.
-  session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
-  session.defaultSession.setPermissionCheckHandler(() => false);
   configurePortugueseMenu();
-  const databaseFile = path.join(app.getPath('userData'), 'finora.sqlite');
-  db = openDatabase(databaseFile);
+  db = openDatabase(path.join(app.getPath('userData'), 'finora.sqlite'));
   const { createInvestmentStore } = await import('./investment-store.mjs');
   const { createFinancialService } = await import('../services/financial.mjs');
   const { createOfficialService } = await import('../services/official.mjs');
@@ -144,7 +123,6 @@ app.whenReady().then(async () => {
       if(accountId==null) throw new Error('Selecione a conta que realizou o pagamento');
     }
     // Para compras no crédito, o saldo só muda pelo pagamento da fatura.
-    assertTransactionFunds(db, {...old, paid:data.paid?1:0, account_id:accountId}, old);
     db.prepare('UPDATE transactions SET paid=?,account_id=? WHERE id=?').run(data.paid?1:0,accountId,data.id);
     logActivity('pagamento', `Despesa ${data.paid?'paga':'pendente'}: ${old.description}`);
     return db.prepare('SELECT * FROM transactions WHERE id=?').get(data.id);
@@ -152,8 +130,6 @@ app.whenReady().then(async () => {
   secureHandle('transactions:add', (_event, t) => {
     checkTransaction(t);
     validateCardTransaction(t);
-    if (t.card_id != null && (t.kind || 'despesa') === 'despesa') assertCardLimit(db, t.card_id, cents(t.amount));
-    assertTransactionFunds(db, {...t, paid:0});
     const result = db.prepare('INSERT INTO transactions(description,category,type,amount,date,kind,account_id,card_id,debit_card_id) VALUES(?,?,?,?,?,?,?,?,?)').run(t.description.trim(), t.category, t.type, t.amount, t.date, t.kind || 'despesa', t.account_id ?? null, t.card_id ?? null,t.debit_card_id??null);
     logActivity('criado', `Lançamento criado: ${t.description.trim()} — R$ ${money(t.amount).toFixed(2)}`);
     return db.prepare('SELECT * FROM transactions WHERE id=?').get(result.lastInsertRowid);
@@ -164,14 +140,6 @@ app.whenReady().then(async () => {
     validateCardTransaction(t);
     const existing=db.prepare('SELECT * FROM transactions WHERE id=?').get(t.id);
     if(!existing)throw new Error('Lançamento não encontrado');
-    if (t.card_id != null && (t.kind || 'despesa') === 'despesa') assertCardLimit(db, t.card_id, cents(t.amount), existing.card_id===t.card_id && existing.kind==='despesa' ? cents(existing.amount) : 0);
-    // Impede que a redução ou transferência de uma compra deixe pagamentos superiores à dívida.
-    if (existing.card_id != null && existing.kind === 'despesa') {
-      const cardTotals=db.prepare(`SELECT COALESCE((SELECT SUM(amount_cents) FROM transactions WHERE card_id=? AND kind='despesa'),0) purchases, COALESCE((SELECT SUM(amount_cents) FROM card_payments WHERE card_id=?),0) payments`).get(existing.card_id,existing.card_id);
-      const newValue=t.card_id===existing.card_id && (t.kind || 'despesa')==='despesa' ? cents(t.amount) : 0;
-      if (cardTotals.payments > cardTotals.purchases-cents(existing.amount)+newValue) throw new Error('AJUSTE_PAGAMENTO_NECESSARIO');
-    }
-    assertTransactionFunds(db, {...t, paid:existing.paid}, existing);
     db.prepare('UPDATE transactions SET description=?,category=?,type=?,amount=?,date=?,kind=?,account_id=?,card_id=?,debit_card_id=? WHERE id=?')
       .run(t.description.trim(),t.category,t.type,t.amount,t.date,t.kind||'despesa',t.account_id??null,t.card_id??null,t.debit_card_id??null,t.id);
     logActivity('editado', `Lançamento editado: ${existing.description} (R$ ${money(existing.amount).toFixed(2)}) → ${t.description.trim()} (R$ ${money(t.amount).toFixed(2)})`);
@@ -191,7 +159,7 @@ app.whenReady().then(async () => {
       const preview=cardPaymentPreview(id);
       if(preview.overpayment>0 && !refundPayment)throw new Error('ESTORNO_NECESSARIO');
       let refunded=0;
-      if(refundPayment && preview.overpayment>0){
+      if(refundPayment && preview.hasPayments){
         // Payments are aggregated by card; unwind newest first, up to the purchase amount.
         let remaining=cents(preview.refund);
         const payments=db.prepare('SELECT * FROM card_payments WHERE card_id=? ORDER BY date DESC,id DESC').all(t.card_id);
@@ -235,8 +203,6 @@ app.whenReady().then(async () => {
     if (!Number.isSafeInteger(a?.id) || a.id <= 0 || typeof a.name !== 'string' || !a.name.trim() || a.name.trim().length > 100 || !validMoney(a.opening_balance) || a.opening_balance < 0) throw new Error('CONTA_INVALIDA');
     if (!db.prepare('SELECT id FROM accounts WHERE id=?').get(a.id)) throw new Error('CONTA_INEXISTENTE');
     if (db.prepare('SELECT id FROM accounts WHERE LOWER(name)=LOWER(?) AND id<>?').get(a.name.trim(),a.id)) throw new Error('CONTA_DUPLICADA');
-    const currentAccount=db.prepare('SELECT opening_balance_cents FROM accounts WHERE id=?').get(a.id);
-    assertAccountFunds(db, a.id, Math.max(0, currentAccount.opening_balance_cents-cents(a.opening_balance)));
     db.prepare('UPDATE accounts SET name=?, opening_balance=? WHERE id=?').run(a.name.trim(),money(a.opening_balance),a.id);
     logActivity('editado',`Conta editada: ${a.name.trim()} — saldo inicial R$ ${money(a.opening_balance).toFixed(2)}`);
     return db.prepare('SELECT * FROM accounts WHERE id=?').get(a.id);
@@ -400,7 +366,7 @@ app.whenReady().then(async () => {
     }
     return db.prepare('INSERT INTO card_payments(card_id,account_id,amount,date) VALUES(?,?,?,?)').run(p.card_id,p.account_id??null,p.amount,p.date).lastInsertRowid;
   });
-  secureHandle('btc:list', () => db.prepare('SELECT time, price FROM btc_history ORDER BY time DESC LIMIT 168').all() .reverse());
+  secureHandle('btc:list', () => db.prepare('SELECT time, price FROM btc_history ORDER BY time DESC LIMIT 168').all().reverse());
   secureHandle('btc:add', (_event, snapshot) => {
     if (!Number.isFinite(snapshot?.price) || snapshot.price <= 0 || !Number.isSafeInteger(snapshot.time)) throw new Error('Cotação inválida');
     db.prepare('INSERT OR REPLACE INTO btc_history(time,price) VALUES(?,?)').run(snapshot.time,snapshot.price);
@@ -410,39 +376,30 @@ app.whenReady().then(async () => {
     const {canceled,filePaths}=await dialog.showOpenDialog({title:'Restaurar backup do ORDEFIN',properties:['openFile'],filters:[{name:'Backup SQLite',extensions:['sqlite','db']}]});
     if(canceled||!filePaths?.length)return false;
     const source=filePaths[0];
-    validateBackupFile(source);
     const check=new DatabaseSync(source,{readOnly:true});
     try {
       const result=check.prepare('PRAGMA integrity_check').get();
       if(!result||Object.values(result)[0]!=='ok')throw new Error('Backup SQLite inválido.');
       const names=new Set(check.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map(x=>x.name));
       if(!['accounts','transactions','credit_cards','card_payments'].every(x=>names.has(x)))throw new Error('Este arquivo não é um backup do ORDEFIN.');
-      if(check.prepare('PRAGMA foreign_key_check').all().length) throw new Error('Backup contém referências financeiras inconsistentes.');
     }finally{check.close();}
     const choice=await dialog.showMessageBox({type:'warning',buttons:['Cancelar','Restaurar e reiniciar'],defaultId:0,cancelId:0,title:'Confirmar restauração',message:'Todos os registros atuais serão substituídos pelo backup selecionado.',detail:'Uma cópia de segurança dos dados atuais será criada antes da substituição.'});
     if(choice.response!==1)return false;
     const target=path.join(app.getPath('userData'),'finora.sqlite');
     const safety=path.join(app.getPath('userData'),`finora-antes-restauracao-${Date.now()}.sqlite`);
     db.prepare('VACUUM INTO ?').run(safety);
-    fs.chmodSync(safety, 0o600);
     const staged=path.join(app.getPath('userData'),`restauracao-${Date.now()}.sqlite`);
     // Snapshot consistente mesmo se o backup de origem estiver em modo WAL.
     // Copiar apenas o arquivo .sqlite poderia omitir transacoes ainda no -wal.
     const backupDb = new DatabaseSync(source, { readOnly: true });
     try { backupDb.prepare('VACUUM INTO ?').run(staged); }
     finally { backupDb.close(); }
-    validateBackupFile(staged);
-    fs.chmodSync(staged, 0o600);
     db.close();
     try {
       for(const ext of ['-wal','-shm']){try{fs.unlinkSync(target+ext)}catch(e){if(e.code!=='ENOENT')throw e;}}
-      // Renomeação atômica no mesmo diretório: evita banco parcialmente copiado.
-      fs.renameSync(staged,target);
-    }catch(e){
-      // A cópia anterior permanece disponível mesmo se a recuperação falhar.
-      try { fs.copyFileSync(safety,target); } catch {}
-      throw e;
-    }
+      fs.copyFileSync(staged,target);
+      fs.unlinkSync(staged);
+    }catch(e){fs.copyFileSync(safety,target);throw e;}
     app.relaunch();app.exit(0);
     return true;
   });
@@ -454,10 +411,7 @@ app.whenReady().then(async () => {
     const tmp = path.join(app.getPath('temp'), `finora-backup-${process.pid}-${Date.now()}.sqlite`);
     try {
       db.prepare('VACUUM INTO ?').run(tmp);
-      fs.chmodSync(tmp, 0o600);
-      validateBackupFile(tmp);
       fs.copyFileSync(tmp, filePath);
-      fs.chmodSync(filePath, 0o600);
       return true;
     } finally {
       if (fs.existsSync(tmp)) fs.unlinkSync(tmp);

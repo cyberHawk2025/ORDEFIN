@@ -121,13 +121,6 @@ function openDatabase(file) {
   const db = new DatabaseSync(file)
 
   try {
-    // Verifica integridade antes de migrar ou gerar cópias de segurança.
-    // Um arquivo danificado nunca deve ser regravado automaticamente.
-    const integrity = db.prepare("PRAGMA integrity_check").all()
-    if (integrity.length !== 1 || integrity[0].integrity_check !== "ok") {
-      throw new Error("BANCO_SQLITE_CORROMPIDO: restaure um backup válido")
-    }
-    db.exec("PRAGMA busy_timeout=5000")
     const version = db.prepare("PRAGMA user_version").get().user_version
 
     if (version > 3)

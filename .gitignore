@@ -35,5 +35,4 @@ coverage/
 test-results/
 playwright-report/
 
-# IMPORTANTE: dist/ deve ser versionada nesta edição.
-# O ZIP original não contém src/ e o Electron carrega a interface de dist/.
+# dist/ é gerada pelo build e versionada para facilitar a distribuição.

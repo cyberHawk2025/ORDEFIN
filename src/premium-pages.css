@@ -1,0 +1,302 @@
+/* ORDEFIN 16.33 — visual premium das cinco guias aprovadas.
+   Escopo EXCLUSIVO: dashboard, transactions, wallet, accounts e bitcoin.
+   NÃO aplica estilos a investments ou settings. Nenhum evento ou cálculo é alterado. */
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) {
+  --premium-bg:#030a16;--premium-panel:#07172d;--premium-panel-2:#091d36;
+  --premium-line:rgba(37,132,191,.46);--premium-muted:#9ab2ca;
+  --premium-blue:#258aff;--premium-green:#18d69b;--premium-red:#ff6175;
+  background:linear-gradient(165deg,#020710,#040d1a 62%,#061426);color:#f5faff;
+  min-height:100vh;
+}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .topbar {
+  min-height:74px;padding:13px 25px;background:linear-gradient(100deg,#061327,#071b31) !important;
+  border-bottom:1px solid rgba(35,117,174,.48);box-shadow:0 4px 24px rgba(0,0,0,.17);
+}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .topbar h1{color:#fff;font-size:21px;font-weight:800;letter-spacing:-.5px}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .today{color:#92abc4;font-size:10px}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .content{padding:22px 25px 35px;max-width:1600px}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(.panel,.wallet-tile,.ordefin-card-item,.ordefin-account-item,.v55-account-table-wrap) {
+  background:linear-gradient(155deg,#081a32,#061426) !important;
+  border:1px solid var(--premium-line) !important;border-radius:12px !important;
+  box-shadow:inset 0 1px rgba(130,203,255,.04),0 8px 25px rgba(0,0,0,.12) !important;
+  color:#eaf3ff;
+}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(.panel h2,.panel h3,.wallet-tile h3,.panel-head h2){color:#fff;font-weight:750}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(.eyebrow,.wallet-tag){color:#46ddca !important}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(.metric-note,.metric-label,.wallet-hint,.panel p,.panel small,.wallet-summary small,.wallet-summary span){color:#a7bbd0}
+/* Cards: tonalidade por função, sem preenchimentos sólidos. */
+html[data-theme="dark"] .workspace-dashboard .summary-grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:11px}
+html[data-theme="dark"] .workspace-dashboard .summary-grid>.metric-card,
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics>div,
+html[data-theme="dark"] .workspace-wallet .wallet-summary>div {
+  background:rgba(6,30,66,.50) !important;border:1px solid #176ab0 !important;
+  border-radius:12px !important;box-shadow:inset 0 1px rgba(255,255,255,.035) !important;
+  padding:15px 17px !important;min-height:116px !important;gap:5px !important;
+  color:#fff !important;
+}
+html[data-theme="dark"] .workspace-dashboard .summary-grid>.metric-card:nth-child(1),
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics>div:nth-child(1),
+html[data-theme="dark"] .workspace-wallet .wallet-summary>div:nth-child(1){background:rgba(4,48,29,.42) !important;border-color:#0bb981 !important}
+html[data-theme="dark"] .workspace-dashboard .summary-grid>.metric-card:nth-child(2),
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics>div:nth-child(2){background:rgba(4,48,29,.28) !important;border-color:#0b9d79 !important}
+html[data-theme="dark"] .workspace-dashboard .summary-grid>.metric-card:nth-child(3),
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics>div:nth-child(3){background:rgba(63,13,18,.40) !important;border-color:#d64a5b !important}
+html[data-theme="dark"] .workspace-wallet .wallet-summary>div:nth-child(2){background:rgba(6,30,66,.5) !important;border-color:#258aff !important}
+html[data-theme="dark"] .workspace-wallet .wallet-summary>div:nth-child(3){background:rgba(63,13,18,.32) !important;border-color:#c95769 !important}
+html[data-theme="dark"] .workspace-dashboard .summary-grid .metric-card strong,
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics strong,
+html[data-theme="dark"] .workspace-wallet .wallet-summary strong{font-size:clamp(17px,1.7vw,24px) !important;line-height:1.2;color:#fff !important;font-weight:800 !important}
+html[data-theme="dark"] .workspace-dashboard .summary-grid>.metric-card:first-child>strong,
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics>div:first-child strong,
+html[data-theme="dark"] .workspace-wallet .wallet-summary>div:first-child strong{color:#4cf0b5 !important}
+html[data-theme="dark"] .workspace-dashboard .metric-card .metric-icon{
+  width:31px;height:31px;border-radius:50% !important;
+  background:rgba(17,168,127,.2) !important;color:#52e9bd !important;
+  border:1px solid rgba(31,225,163,.32) !important;box-shadow:none !important;
+}
+html[data-theme="dark"] .workspace-dashboard .metric-card:nth-child(2) .metric-icon,
+html[data-theme="dark"] .workspace-dashboard .metric-card:nth-child(4) .metric-icon{background:rgba(30,112,222,.23) !important;color:#7bbcff !important;border-color:rgba(48,146,255,.4) !important}
+html[data-theme="dark"] .workspace-dashboard .metric-card:nth-child(3) .metric-icon{background:rgba(180,34,62,.24) !important;color:#ff8b9b !important;border-color:rgba(255,89,113,.35) !important}
+html[data-theme="dark"] .workspace-dashboard .metric-label{margin-top:7px;color:#b5c9dd !important}
+html[data-theme="dark"] .workspace-dashboard .metric-note{font-size:10px;line-height:1.4;color:#92acc6 !important}
+html[data-theme="dark"] .workspace-dashboard .dashboard-grid{grid-template-columns:1.3fr 1fr;gap:12px;margin-top:12px}
+html[data-theme="dark"] .workspace-dashboard .annual-chart{background:repeating-linear-gradient(to bottom,transparent 0,transparent 48px,rgba(100,155,200,.1) 49px);border-bottom-color:rgba(255,255,255,.08)}
+html[data-theme="dark"] .workspace-dashboard .bar-track{background:rgba(41,70,101,.34)}
+html[data-theme="dark"] .workspace-dashboard .donut-base{stroke:#18344e}
+html[data-theme="dark"] .workspace-dashboard :is(.recent-panel,.annual-panel){margin-top:12px}
+/* Lançamentos: pílulas e tabela escura compacta. */
+html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics{grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:10px !important}
+html[data-theme="dark"] .workspace-transactions .v54-filter-tabs button,
+html[data-theme="dark"] .workspace-bitcoin :is(.crypto-converter-modes,.crypto-periods,.crypto-chart-style) button,
+html[data-theme="dark"] .workspace-bitcoin .crypto-currency-toggle button{
+  border-radius:999px !important;background:#0b2039 !important;color:#c0d6ed !important;
+  border:1px solid rgba(60,116,163,.44) !important;padding:8px 15px;
+}
+html[data-theme="dark"] .workspace-transactions .v54-filter-tabs button.active,
+html[data-theme="dark"] .workspace-bitcoin :is(.crypto-converter-modes,.crypto-periods,.crypto-chart-style) button.active,
+html[data-theme="dark"] .workspace-bitcoin .crypto-currency-toggle button.active{
+  background:#126bcd !important;border-color:#329cff !important;color:#fff !important;box-shadow:0 0 13px rgba(20,128,255,.19) !important;
+}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table){border-collapse:collapse;background:transparent;color:#d9e9fa}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) thead,
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) th{background:#0d2a44 !important;color:#b8d4ed !important}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) tbody tr{background:#07172d !important}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) tbody tr:nth-child(even){background:#091c33 !important}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) td{border-bottom:1px solid rgba(255,255,255,.055) !important;color:#e0ebf8}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) tbody tr:hover{background:#102b49 !important}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) :is(.positive,.wallet-positive){color:#42e8b0 !important}
+html[data-theme="dark"] :is(.workspace-transactions,.workspace-wallet,.workspace-accounts) :is(.ordefin-launch-table,.wallet-table,.v55-table) :is(.negative,.wallet-negative){color:#ff7c89 !important}
+/* Carteira e contas: remove laranja e roxo de limites, sem alterar números. */
+html[data-theme="dark"] .workspace-wallet .wallet-summary{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:12px}
+html[data-theme="dark"] .workspace-wallet .wallet-tiles{gap:12px}
+html[data-theme="dark"] .workspace-wallet .wallet-tile{border-color:#286a9a !important}
+html[data-theme="dark"] .workspace-wallet .wallet-tile :is(strong,b){color:#fff}
+html[data-theme="dark"] .workspace-wallet .wallet-card-switch button.is-active{background:#126bcd !important;color:white !important;border-radius:999px}
+html[data-theme="dark"] .workspace-accounts .ordefin-account-list>.ordefin-account-item{background:#0a203a !important;border-color:#236da4 !important}
+html[data-theme="dark"] .workspace-accounts :is(.ordefin-account-action,.transfer-collapsible){background:#071a30 !important;border:1px solid rgba(50,120,165,.42) !important;border-radius:11px !important}
+/* Criptomoedas: preserva identidade da moeda somente no ícone, nunca no card inteiro. */
+html[data-theme="dark"] .workspace-bitcoin .crypto-top-row{gap:12px}
+html[data-theme="dark"] .workspace-bitcoin .bitcoin-hero.bitcoin-compact-card.crypto-color-card{
+  background:linear-gradient(150deg,#081b35,#061426) !important;
+  border:1px solid #286e9e !important;border-radius:12px !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.04) !important;
+}
+html[data-theme="dark"] .workspace-bitcoin .crypto-coin-symbol{border-radius:50% !important;background:var(--coin-accent,#f59e0b) !important}
+html[data-theme="dark"] .workspace-bitcoin .bitcoin-title>strong{color:#fff !important;font-weight:800}
+html[data-theme="dark"] .workspace-bitcoin .crypto-converter-compact{background:linear-gradient(150deg,#081b35,#061426) !important;border-color:#286e9e !important}
+html[data-theme="dark"] .workspace-bitcoin :is(.crypto-converter-result,.crypto-converter-head h2){color:#fff}
+html[data-theme="dark"] .workspace-bitcoin .crypto-dynamic-chart{background:#07172d !important;border-color:#286e9e !important}
+/* Controles de entrada e botões, sem interferir em handlers React. */
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(input,select,textarea,.period-select,.icon-button){background:#14273f !important;border:1px solid rgba(99,143,181,.38) !important;color:#f1f7ff !important;border-radius:9px !important}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(input,select,textarea,button):focus-visible{outline:2px solid #40c6ff !important;outline-offset:2px}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .button.primary{background:linear-gradient(110deg,#087c68,#0b956d) !important;border:1px solid #17b98b !important;color:#fff !important;border-radius:10px !important}
+html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .button.secondary{background:#102840 !important;color:#d5e6f7 !important;border:1px solid #345674 !important}
+@media(max-width:1100px){html[data-theme="dark"] .workspace-dashboard .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}
+@media(max-width:760px){html[data-theme="dark"] .workspace-dashboard .dashboard-grid{grid-template-columns:1fr}html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics,html[data-theme="dark"] .workspace-wallet .wallet-summary{grid-template-columns:repeat(2,minmax(0,1fr)) !important}html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) .content{padding:14px}}
+@media(max-width:480px){html[data-theme="dark"] .workspace-dashboard .summary-grid,html[data-theme="dark"] .workspace-transactions .ordefin-forecast-metrics,html[data-theme="dark"] .workspace-wallet .wallet-summary{grid-template-columns:1fr !important}}
+@media(prefers-reduced-motion:reduce){html[data-theme="dark"] :is(.workspace-dashboard,.workspace-transactions,.workspace-wallet,.workspace-accounts,.workspace-bitcoin) :is(.panel,.metric-card,.wallet-tile){transition:none !important}}
+
+/* 16.34 — dashboard: conteúdo contido nos cards, inclusive em janelas estreitas. */
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign,
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign :is(.summary-grid,.dashboard-grid,.panel,.metric-card,.panel-head,.distribution-content,.legend,.legend-row){min-width:0;max-width:100%;box-sizing:border-box}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .summary-grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;align-items:stretch}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .metric-card{min-width:0 !important;overflow:hidden;justify-content:center;padding:14px !important}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .metric-card :is(strong,.metric-label,.metric-note){max-width:100%;overflow-wrap:anywhere;white-space:normal !important}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .metric-card>strong{font-size:clamp(16px,1.65vw,23px) !important;line-height:1.2}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .dashboard-grid{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) !important;align-items:stretch}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .dashboard-grid>.panel{min-width:0;overflow:hidden;padding:16px !important}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .panel-head{display:flex;flex-wrap:wrap;align-items:flex-start;gap:9px}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .panel-head>div{min-width:0;flex:1 1 140px}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .panel-head :is(h2,.eyebrow){overflow-wrap:anywhere}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .chart-legend{flex-wrap:wrap;gap:6px 10px;justify-content:flex-end}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .annual-chart{width:100%;min-width:0;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(2px,.55vw,9px);overflow:hidden}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .month-column{min-width:0}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .bar-track{max-width:100%}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .distribution-content{display:grid;grid-template-columns:minmax(100px,170px) minmax(0,1fr);gap:clamp(10px,1.5vw,20px);align-items:center;padding:14px 0 0}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .donut-wrap{width:100%;height:auto;aspect-ratio:1;min-width:0;max-width:170px;justify-self:center}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend{min-width:0;gap:10px}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend-row{grid-template-columns:8px minmax(0,1fr) auto auto;gap:5px;font-size:clamp(9px,.85vw,11px)}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend-row :is(span,strong,small){min-width:0;overflow-wrap:anywhere}
+html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend-row strong{font-size:inherit}
+@media(max-width:1300px){html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .distribution-content{grid-template-columns:1fr;justify-items:center}html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend{width:100%}}
+@media(max-width:1050px){html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .dashboard-grid{grid-template-columns:1fr !important}html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .distribution-content{grid-template-columns:minmax(100px,170px) minmax(0,1fr);justify-items:stretch}}
+@media(max-width:850px){html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media(max-width:560px){html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .summary-grid{grid-template-columns:1fr !important}html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .distribution-content{grid-template-columns:1fr;justify-items:center}html[data-theme="dark"] .workspace-dashboard .dashboard-redesign .legend{width:100%}}
+
+/* 16.34 — card cripto: cor acompanha o ativo selecionado via --coin-accent/--coin-bg do React. */
+html[data-theme="dark"] .workspace-bitcoin .bitcoin-hero.bitcoin-compact-card.crypto-color-card{
+  background:linear-gradient(140deg,color-mix(in srgb,var(--coin-bg,#223548) 70%,#07162c),#07162c 85%) !important;
+  border:1px solid color-mix(in srgb,var(--coin-accent,#6f92b6) 76%,#172a43) !important;
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--coin-accent,#6f92b6) 18%,transparent),0 0 19px color-mix(in srgb,var(--coin-accent,#6f92b6) 10%,transparent) !important;
+  transition:background-color .22s,border-color .22s,box-shadow .22s !important;
+}
+html[data-theme="dark"] .workspace-bitcoin .bitcoin-hero.crypto-color-card .crypto-coin-symbol{
+  background:var(--coin-accent,#f7931a) !important;
+  border:1px solid color-mix(in srgb,var(--coin-accent,#f7931a) 65%,#fff) !important;
+  color:#071323 !important;
+}
+html[data-theme="dark"] .workspace-bitcoin .bitcoin-hero.crypto-color-card .crypto-coin-picker:focus-visible{outline-color:var(--coin-accent,#f7931a) !important}
+
+
+/* ORDEFIN 16.37 — Visão Geral: compactação efetiva e grade sem espaços ociosos.
+   Escopo isolado; preserva JSX, handlers, gráficos, valores e tema das outras guias. */
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign {
+  display:grid !important;
+  grid-template-columns:minmax(0,1.18fr) minmax(0,1fr) !important;
+  column-gap:12px !important;
+  row-gap:12px !important;
+  align-items:start !important;
+  padding-top:14px !important;
+  padding-bottom:20px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > * {min-width:0;max-width:100%;margin:0 !important;box-sizing:border-box}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .summary-grid {
+  grid-column:1/-1 !important;grid-row:1 !important;
+  display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:12px !important;padding:0 !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .summary-grid > .metric-card {
+  min-height:100px !important;height:auto !important;padding:10px 13px !important;
+  gap:2px !important;justify-content:center !important;overflow:hidden;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .metric-head {margin:0 !important;line-height:1}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .metric-icon {width:24px !important;height:24px !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .metric-label {margin:1px 0 0 !important;font-size:10px !important;line-height:1.2 !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .metric-card > strong {font-size:clamp(17px,1.7vw,22px) !important;line-height:1.18 !important;overflow-wrap:anywhere}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .metric-note {font-size:10px !important;line-height:1.24 !important;overflow-wrap:anywhere}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .annual-panel {
+  grid-column:1 !important;grid-row:2 !important;min-height:0 !important;
+  padding:12px 14px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .dashboard-grid {
+  grid-column:2 !important;grid-row:2 !important;display:block !important;
+  grid-template-columns:none !important;gap:0 !important;min-height:0 !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .dashboard-grid > .distribution-panel {
+  min-height:0 !important;padding:12px 14px !important;overflow:hidden;
+}
+/* O painel BTC já estava oculto na versão de referência: não alterar seu comportamento. */
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .annual-chart {
+  height:146px !important;min-height:0 !important;margin-top:8px !important;
+  padding-top:5px !important;min-width:0 !important;width:100% !important;
+  grid-template-columns:repeat(12,minmax(0,1fr)) !important;gap:5px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .bar-track {width:min(22px,85%) !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .panel-head {gap:6px !important;margin-bottom:5px !important;align-items:start}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .panel-head h2 {font-size:14px !important;line-height:1.25 !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .eyebrow {font-size:9px !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .chart-legend {gap:4px 7px !important;flex-wrap:wrap}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content {
+  display:grid !important;grid-template-columns:minmax(92px,120px) minmax(0,1fr) !important;
+  align-items:center !important;gap:9px !important;padding:5px 0 0 !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .donut-wrap {
+  width:118px !important;height:118px !important;max-width:100% !important;min-width:0 !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .legend {min-width:0 !important;gap:4px !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .legend-row {font-size:10px !important;gap:4px !important;grid-template-columns:8px minmax(0,1fr) auto auto !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .legend-row > * {min-width:0;overflow-wrap:anywhere}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .recent-panel {
+  grid-column:1 !important;grid-row:3 !important;min-height:0 !important;padding:12px 14px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .wallet-shortcut {
+  grid-column:2 !important;grid-row:3 !important;
+  min-height:0 !important;padding:12px 14px !important;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .ordefin-cards-panel {
+  grid-column:1/-1 !important;grid-row:4 !important;min-height:0 !important;padding:12px 14px !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-card-totals {
+  margin:8px 0 !important;gap:10px !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-card-totals > div {
+  min-height:65px !important;padding:9px 12px !important;justify-content:center !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-card-totals small {margin:0 0 3px !important;font-size:10px !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-card-totals strong {font-size:19px !important;margin:0 !important}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-cards-panel > p {margin:6px 0 !important;line-height:1.35}
+@media(max-width:1050px) {
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign {grid-template-columns:minmax(0,1fr) !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > :is(.annual-panel,.dashboard-grid,.recent-panel,.wallet-shortcut,.ordefin-cards-panel) {grid-column:1 !important;grid-row:auto !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .summary-grid {grid-row:auto !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .wallet-shortcut {flex-direction:row;align-items:center;justify-content:space-between}
+}
+@media(max-width:700px) {
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .summary-grid {grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content {grid-template-columns:minmax(90px,120px) minmax(0,1fr) !important}
+}
+@media(max-width:430px) {
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .summary-grid {grid-template-columns:1fr !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .ordefin-card-totals {grid-template-columns:1fr !important}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content {grid-template-columns:1fr !important;justify-items:center}
+}
+
+/* ORDEFIN 16.38 — painéis de gráficos com altura idêntica e distribuição centralizada.
+   Somente Visão Geral; nenhuma alteração de lógica, dados ou outros temas. */
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign {
+  align-items:stretch !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .annual-panel,
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .dashboard-grid {
+  height:100% !important;
+  min-height:0 !important;
+  align-self:stretch !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .dashboard-grid {
+  display:flex !important;
+  flex-direction:column !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .dashboard-grid > .distribution-panel {
+  flex:1 1 auto !important;
+  height:100% !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content {
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  width:100% !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  align-content:center !important;
+  justify-content:center !important;
+  justify-items:center !important;
+  grid-template-columns:minmax(90px,118px) minmax(0,1fr) !important;
+  gap:clamp(10px,2vw,22px) !important;
+}
+html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content .legend {
+  width:100% !important;
+  max-width:280px !important;
+  justify-self:center !important;
+}
+@media(max-width:560px) {
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .annual-panel,
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign > .dashboard-grid {height:auto !important;}
+  html[data-theme="dark"] .ordefin-workspace.workspace-dashboard .dashboard-redesign .distribution-content {
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+    padding:12px 0 4px !important;
+  }
+}

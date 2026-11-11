@@ -1,0 +1,38 @@
+type FinoraAccount = {id:number;name:string;opening_balance:number;balance:number};
+type FinoraTransfer = {id:number;source_account_id:number;destination_account_id:number;amount:number;date:string;note:string};
+type OrdefinCard = {id:number;name:string;credit_limit:number;issuer?:string;brand?:string;last_four?:string;card_mode:"debito"|"credito"|"ambos";account_id?:number|null;purchases:number;payments:number;used:number;available:number};
+type FinoraTransaction = { id: number; description: string; category: string; type: "Cartão" | "Empréstimo" | "Conta fixa"; amount: number; date: string; kind?: "receita" | "despesa"; account_id?: number | null; card_id?: number | null;debit_card_id?:number|null;paid?:number };
+interface Window { finora?: {
+  listCards(): Promise<OrdefinCard[]>;
+  addCard(card:{name:string;credit_limit:number;issuer?:string;brand?:string;last_four?:string;card_mode:"debito"|"credito"|"ambos";account_id?:number|null}): Promise<OrdefinCard>;
+  identifyCard(prefix:string): Promise<{issuer:string;brand:string;source:string}>;
+  updateCardIdentity(card:{id:number;name:string;issuer:string;brand:string}): Promise<OrdefinCard>;
+  updateCardLimit(card:{id:number;credit_limit:number}): Promise<OrdefinCard>;
+  deleteCard(id:number): Promise<boolean>;
+  updateCardMode(card:{id:number;card_mode:"debito"|"credito"|"ambos";account_id:number|null}):Promise<OrdefinCard>;
+  updateCardNumber(card:{id:number;last_four:string;issuer:string;brand:string}): Promise<OrdefinCard>;
+  payCard(payment:{card_id:number;account_id:number|null;amount:number;date:string}): Promise<number>;
+  listAccounts(): Promise<FinoraAccount[]>;
+  updateAccount(a:{id:number;name:string;opening_balance:number}): Promise<FinoraAccount>;
+  setCurrentAccountBalance(a:{id:number;name:string;balance:number}): Promise<boolean>;
+  deleteAccount(id:number): Promise<boolean>;
+  listCardPayments(): Promise<{id:number;card_id:number;account_id:number|null;amount:number;date:string;card_name:string;account_name:string|null}[]>;
+  updateCardPayment(p:{id:number;amount:number}): Promise<boolean>;
+  deleteCardPayment(id:number): Promise<boolean>;
+  addAccount(a: {name:string;opening_balance:number}): Promise<FinoraAccount>;
+  listTransfers(): Promise<FinoraTransfer[]>;
+  addTransfer(t: Omit<FinoraTransfer,'id'>): Promise<FinoraTransfer>;
+  listTransactions(): Promise<FinoraTransaction[]>;
+  setTransactionPaid(data:{id:number;paid:boolean;account_id?:number|null}):Promise<FinoraTransaction>;
+  addTransaction(t: Omit<FinoraTransaction,"id">): Promise<FinoraTransaction>;
+  updateTransaction(t: FinoraTransaction): Promise<FinoraTransaction>;
+  deleteTransaction(id:number,refundPayment?:boolean): Promise<{deleted:boolean;refunded:number}>;
+  previewTransactionDeletion(id:number): Promise<{hasPayments:boolean;refund:number;overpayment:number}>;
+  listActivity(): Promise<{id:number;action:string;message:string;created_at:string}[]>;
+  importExcel(rows: Omit<FinoraTransaction,"id">[]): Promise<number>;
+  importLegacy(rows: FinoraTransaction[]): Promise<FinoraTransaction[]>;
+  listBtc(): Promise<{time:number;price:number}[]>;
+  addBtc(s:{time:number;price:number}): Promise<void>;
+  saveBackup(): Promise<boolean>;
+  restoreBackup(): Promise<boolean>;
+}; }
