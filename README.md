@@ -2,8 +2,6 @@
 
 **Aplicativo desktop de controle financeiro pessoal para Windows.**
 
-Esta é a **edição sem conexão bancária automática**. O ORDEFIN permite acompanhar contas e cartões cadastrados manualmente, lançamentos, investimentos e criptomoedas. Não inclui integração Open Finance nem importação bancária OFX/CSV.
-
 ## Tecnologias
 
 - Electron — aplicativo desktop Windows.
