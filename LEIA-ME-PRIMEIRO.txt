@@ -1,0 +1,11 @@
+ORDEFIN — EDIÇÃO PARA GITHUB (SEM OPEN FINANCE)
+
+1. Extraia o ZIP.
+2. Abra a pasta ORDEFIN-GITHUB-PRONTO no VS Code.
+3. Leia README.md e GUIA-GITHUB-VSCODE.md.
+4. Para testar no Windows: npm.cmd ci e npm.cmd run desktop:start.
+5. Para gerar instalador: npm.cmd run encapsular.
+
+ATENÇÃO: Este pacote tem a interface compilada em dist/, mas NÃO tem o código-fonte src/.
+Não execute npm.cmd run build sem recuperar os arquivos-fonte.
+Não publique dados financeiros pessoais, backups ou credenciais.

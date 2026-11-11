@@ -1,0 +1,39 @@
+# Dependências instaladas localmente
+node_modules/
+
+# Instaladores e executáveis gerados
+release/
+out/
+*.exe
+*.msi
+*.blockmap
+
+# Dados privados e backups
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.ofx
+*.csv
+*.bak
+*.backup
+*.log
+.env
+.env.*
+!.env.example
+
+# Arquivos locais
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+coverage/
+test-results/
+playwright-report/
+
+# IMPORTANTE: dist/ deve ser versionada nesta edição.
+# O ZIP original não contém src/ e o Electron carrega a interface de dist/.
